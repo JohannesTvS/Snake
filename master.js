@@ -1,32 +1,29 @@
 var vakZijde = 40;
-var kleur = 'green';
-
+var aantalHokjes = 20;
+var spelVlakBreedte = aantalHokjes*vakZijde; // per rij
 function setup() {
-createCanvas(501,501);  // 40 breede/hooge * 20 hokjes + 21 lijnen
+createCanvas(spelVlakBreedte+1,spelVlakBreedte+1);  // 40 breede/hooge * 20 hokjes + 21 lijnen
   background('black');  
-    for (var rij = 0;rij < 500;rij += 50) {
-    for (var kolom = 0;kolom < 500;kolom += 50) {
-      fill(kleur);
-      rect(kolom,rij,50,50);
-      if (kleur == 'white') {
-        kleur = 'black';
-      }
-      else {
-        kleur = 'white';
-      }
-    }
-    if (kleur=='white') {
-      kleur='black';
-    }
-    else {
-      kleur='white';
-    }
-  }
 }
 
 function draw() {
-  stroke('green', 100);
-  rect(1, 1, 200, 200);
+    createCheckers(spelVlakBreedte, vakZijde);
 }
+
+function createCheckers (spelVlakBreedte, vakZijde) {
+    for (var rij = 0;rij < spelVlakBreedte;rij += vakZijde) {
+        for (var kolom = 0;kolom < spelVlakBreedte;kolom += vakZijde) {
+            if ((rij % (vakZijde*2) == 0 && kolom % (vakZijde*2) != 0) || (kolom % (vakZijde*2) == 0 && rij % (vakZijde*2) != 0)) {
+                fill('black');
+                rect(kolom,rij,vakZijde,vakZijde);
+            }
+            else {
+            fill('white');
+            rect(kolom,rij,vakZijde,vakZijde);
+            }
+        }
+    }
+}
+
 
 
