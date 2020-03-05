@@ -1,14 +1,21 @@
 var vakZijde = 40;
 var aantalHokjes = 20;
-var spelVlakBreedte = aantalHokjes*vakZijde; // per rij
+var spelVlakBreedte = aantalHokjes*vakZijde;
+var beginLengte = 3;
+
 function setup() {
-createCanvas(spelVlakBreedte+1,spelVlakBreedte+1);  // 40 breede/hooge * 20 hokjes + 21 lijnen
+createCanvas(spelVlakBreedte+1,spelVlakBreedte+1);
   background('black');  
+      createCheckers(spelVlakBreedte, vakZijde);
+  slang = new Snake();
+    slang.teken();
 }
 
+
 function draw() {
-    createCheckers(spelVlakBreedte, vakZijde);
+
 }
+
 
 function createCheckers (spelVlakBreedte, vakZijde) {
     for (var rij = 0;rij < spelVlakBreedte;rij += vakZijde) {
