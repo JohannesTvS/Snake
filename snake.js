@@ -1,13 +1,15 @@
 class Snake {
+
   constructor() {
-    this.x = 10 * vakZijde;
-    this.y = 10 * vakZijde;
+    this.x = round(aantalHokjes / 2) * vakZijde;
+    this.y = round(aantalHokjes / 2) * vakZijde;
     this.lichaam = []
     for (let i = 0; i < beginLengte; i++) {
       this.lichaam.push(this.x + i * vakZijde, this.y);
     }
     this.lengte = this.lichaam.length;
   }
+
   teken() {
 
     fill("blue");
@@ -19,21 +21,33 @@ class Snake {
 
   beweeg(richting) {
 
+    this.beweegStaart = function() {
+      this.lengte = this.lichaam.length;
+      for (let i = this.lengte - 1; i > 1; i--) {
+        this.lichaam[i] = this.lichaam[i - 2];
+        
+      }
+    }
 
     switch (richting) {
       case "omhoog":
+        this.beweegStaart();
+        this.lichaam[1] = this.lichaam[1] - vakZijde;
         break;
       case "links":
-        this.lichaam[0] = this.lichaam[0] - vakZijde;
         
-        this.lengte = this.lichaam.length;  //deze drie moeten in een functie ofzo
-        for (let i = 2; i < this.lengte; i++) {    //maar snap niet hoe dat in een class 
-          this.lichaam[i] = this.lichaam[i - 2]    //zou moeten werken
-        }
+        this.beweegStaart();
+        this.lichaam[0] = this.lichaam[0] - vakZijde;
         break;
-      case "omhoog":
+      case "rechts":
+        this.beweegStaart();
+        this.lichaam[0] = this.lichaam[0] + vakZijde;
         break;
-      case "omhoog":
+      case "omlaag":
+        this.beweegStaart();
+        this.lichaam[1] = this.lichaam[1] + vakZijde;
+        break;
+      default:
         break;
     }
   }

@@ -1,23 +1,31 @@
 var vakZijde = 40;
-var aantalHokjes = 20;
+var aantalHokjes = 17;
 var spelVlakBreedte = aantalHokjes * vakZijde;
 var beginLengte = 3;
 var richting = "links";
 
 function setup() {
   createCanvas(spelVlakBreedte + 1, spelVlakBreedte + 1);
-  frameRate(1);
+  frameRate(5);
   background('black');
   slang = new Snake();
-
+  eten = new Eten();
+  eten.vindPlek();
+  createCheckers(spelVlakBreedte, vakZijde);
+  slang.beweeg(richting);
+ slang.teken();
+  eten.teken();
 }
 
 
-function draw(){
-    createCheckers(spelVlakBreedte, vakZijde);
-    slang.beweeg(richting);
-    slang.teken();
-console.log(richting);
+function draw() {
+  createCheckers(spelVlakBreedte, vakZijde);
+  slang.beweeg(richting);
+  slang.teken();
+   if (eten.isGegeten()) {
+    eten.vindPlek();
+ }
+  eten.teken();
 
 }
 
@@ -65,5 +73,7 @@ function keyPressed() {
     default:
       break;
   }
+
+
 
 }
