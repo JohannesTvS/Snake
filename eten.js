@@ -1,26 +1,27 @@
 class Eten {
-  constructor() {
+  constructor(slangNaam) {
     this.x = 0;
     this.y = 0;
-  }
-  vindPlek() {
-    do {
-      this.x = int(random(1, aantalHokjes + 1)) * vakZijde;
-      this.y = int(random(1, aantalHokjes + 1)) * vakZijde;
-    }
-    while (slang.lichaam[0] == this.x && slang.lichaam[1] == this.y) //klopt nog niet, moet hele lichaam checken maar heb nu geen zin om dat te fixen
-    //vgm zorgt dat er ook voor dat er soms geen eten is. Dan is een blokje ergens in de slang gespawnd.
-  }
-  teken() {
-    fill('red');
-    rect(this.x, this.y, vakZijde, vakZijde);
-  }
-
-  isGegeten() {
-    if (slang.lichaam[0] == this.x && slang.lichaam[1] == this.y) {
-      return true;
-   } else {
-      return false;
-   }
+    this.vindPlek(slangNaam);
  }
+  
+  vindPlek(slangNaam) {
+      do {  //zoekt een willekeurige x en y voor het eten
+        this.x = floor(random(1, aantalHokjes)); 
+        this.y = floor(random(1, aantalHokjes));
+    }
+      while (!slangNaam.plekVrij(this.x,this.y));   //vraag aan plekVrij of het eten niet op een plek zit waar de slang al is
+   }
+
+
+
+    teken() {
+      fill('red');
+      rect(this.x * vakZijde, this.y * vakZijde, vakZijde, vakZijde);
+    }
+
+    isGegeten(slangNaam) {
+        //returnt true als het hoofd op dezelfde plek zit als het eten, returnt anders false
+      return (slangNaam.lichaam[0] == this.x && slangNaam.lichaam[1] == this.y)
+    }
 }
