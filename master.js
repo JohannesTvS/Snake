@@ -14,10 +14,11 @@ var positieCorrectie = -(0.5*(spelVlakBreedte + 1)); // omdat we WEBGl gebruiken
 var beginLengte = 3;    //begin lengte van de slang
 var richting = "links"; //begin richting
 var laatsteRichting = richting; //richting die de slang de laatste keer is opgegaan
+var fps = 24
 
 function setup() {
   createCanvas(spelVlakBreedte + 1, spelVlakBreedte + 1, WEBGL); // met WEBGL kan je 3D-objecten renderen
-  frameRate(4);
+  frameRate(fps);
   background('black');
   slang = new Snake();
   eten = new Eten(slang);
@@ -27,6 +28,7 @@ function setup() {
 }
 
 function draw() {
+if (frameCount % fps == 0) {
   createCheckers(spelVlakBreedte, vakZijde);
   slang.beweeg(richting);
   laatsteRichting = richting;
@@ -40,6 +42,7 @@ function draw() {
   if (slang.dood()) {
    remove();   //stopt alle p5 elementen
  }
+}
 }
 
 
