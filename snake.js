@@ -13,7 +13,7 @@ class Snake {
 
     fill("blue");
     for (let i = 0; i < this.lengte; i += 2) {
-      rect(this.lichaam[i] * vakZijde, this.lichaam[i + 1] * vakZijde, vakZijde, vakZijde);
+      rect(positieCorrectie + this.lichaam[i] * vakZijde, positieCorrectie + this.lichaam[i + 1] * vakZijde, vakZijde, vakZijde);
     }
   }
 

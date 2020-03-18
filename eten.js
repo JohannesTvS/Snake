@@ -16,8 +16,25 @@ class Eten {
 
 
     teken() {
+      push();
       fill('red');
-      rect(this.x * vakZijde, this.y * vakZijde, vakZijde, vakZijde);
+      noStroke();
+      lights();
+      translate(positieCorrectie + 0.5*vakZijde + this.x * vakZijde, positieCorrectie + 0.5*vakZijde + this.y * vakZijde, 0);
+      rotateZ(frameCount * 0.5);   
+      sphere(0.35*vakZijde);
+      
+      fill('brown');
+      translate(0,0,0.15*vakZijde);
+      box(0.1*vakZijde, 0.1*vakZijde, 0.5*vakZijde);
+      
+      fill('green');
+      translate(0.1*vakZijde,0,0.225*vakZijde);
+      box(0.4*vakZijde, 0.2*vakZijde, 0);
+      pop();
+
+      //rect(positieCorrectie + this.x * vakZijde, positieCorrectie + this.y * vakZijde, vakZijde, vakZijde);
+      //translate(this.x * vakZijde, this.y * vakZijde);
     }
 
     isGegeten(slangNaam) {

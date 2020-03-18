@@ -10,12 +10,13 @@ Wat moet er nog gebeuren:
 var vakZijde = 40;  //lengte van 1 vakje
 var aantalHokjes = 13;  //aantal hokjes in de lengte en breedte
 var spelVlakBreedte = aantalHokjes * vakZijde;
+var positieCorrectie = -(0.5*(spelVlakBreedte + 1)); // omdat we WEBGl gebruiken om de 3d kubussen te tekenen is het vlak anders ingesteld, waarbij 0,0 het midden van de canvas is, deze regel corrigeert dat.
 var beginLengte = 3;    //begin lengte van de slang
 var richting = "links"; //begin richting
 var laatsteRichting = richting; //richting die de slang de laatste keer is opgegaan
 
 function setup() {
-  createCanvas(spelVlakBreedte + 1, spelVlakBreedte + 1);
+  createCanvas(spelVlakBreedte + 1, spelVlakBreedte + 1, WEBGL);
   frameRate(4);
   background('black');
   slang = new Snake();
@@ -37,8 +38,8 @@ function draw() {
   eten.teken();
   slang.teken();
   if (slang.dood()) {
-    remove();   //stopt alle p5 elementen
-  }
+   remove();   //stopt alle p5 elementen
+ }
 }
 
 
@@ -47,10 +48,10 @@ function createCheckers(spelVlakBreedte, vakZijde) {    //Senne plz doe deze ik 
     for (var kolom = 0; kolom < spelVlakBreedte; kolom += vakZijde) {
       if ((rij % (vakZijde * 2) == 0 && kolom % (vakZijde * 2) != 0) || (kolom % (vakZijde * 2) == 0 && rij % (vakZijde * 2) != 0)) {
         fill('black');
-        rect(kolom, rij, vakZijde, vakZijde);
+        rect(positieCorrectie + kolom, positieCorrectie + rij,vakZijde,vakZijde);
       } else {
         fill('white');
-        rect(kolom, rij, vakZijde, vakZijde);
+        rect(positieCorrectie + kolom, positieCorrectie +  rij, vakZijde, vakZijde);
       }
     }
   }
