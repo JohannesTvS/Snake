@@ -2,8 +2,8 @@
 Wat moet er nog gebeuren:
     draw pas starten als een knop is ingedrukt
     geluid?
-    3d appels
     beter scherm als je dood bent. Mss iets van een opnieuw knop
+    snelheid van de slang niet vast maken aan de fps, voor smoothere animaties
 */
 
 
@@ -16,7 +16,7 @@ var richting = "links"; //begin richting
 var laatsteRichting = richting; //richting die de slang de laatste keer is opgegaan
 
 function setup() {
-  createCanvas(spelVlakBreedte + 1, spelVlakBreedte + 1, WEBGL);
+  createCanvas(spelVlakBreedte + 1, spelVlakBreedte + 1, WEBGL); // met WEBGL kan je 3D-objecten renderen
   frameRate(4);
   background('black');
   slang = new Snake();
