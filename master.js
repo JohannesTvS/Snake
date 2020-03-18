@@ -4,6 +4,7 @@ Wat moet er nog gebeuren:
     geluid?
     beter scherm als je dood bent. Mss iets van een opnieuw knop
     snelheid van de slang niet vast maken aan de fps, voor smoothere animaties
+    text werkt niet bij eindscherm
 */
 
 
@@ -14,7 +15,8 @@ var positieCorrectie = -(0.5*(spelVlakBreedte + 1)); // omdat we WEBGl gebruiken
 var beginLengte = 3;    //begin lengte van de slang
 var richting = "links"; //begin richting
 var laatsteRichting = richting; //richting die de slang de laatste keer is opgegaan
-var fps = 24
+var fps = 60; //ware frames per seconde
+var spelSnelheid = 4; // fps voor de bewegingen
 
 function setup() {
   createCanvas(spelVlakBreedte + 1, spelVlakBreedte + 1, WEBGL); // met WEBGL kan je 3D-objecten renderen
@@ -25,30 +27,42 @@ function setup() {
   createCheckers(spelVlakBreedte, vakZijde);    //tekent de achtergrond met schaakpatroon
   slang.teken();
   eten.teken();
+  textFont("Verdana");
+  textSize(width / 3);
+  textAlign(CENTER, CENTER);
 }
 
 function draw() {
-if (frameCount % fps == 0) {
-  createCheckers(spelVlakBreedte, vakZijde);
+
+  //if ()
+    createCheckers(spelVlakBreedte, vakZijde);
+  if (frameCount % (fps / spelSnelheid) == 0) {
   slang.beweeg(richting);
   laatsteRichting = richting;
   if (eten.isGegeten(slang)) {
     slang.groei(richting);
     eten = new Eten(slang);
-
   }
+}
   eten.teken();
   slang.teken();
   if (slang.dood()) {
-   remove();   //stopt alle p5 elementen
+   eindScherm();   //stopt alle p5 elementen
  }
-}
+
 }
 
+function eindScherm() {
+  background('white');
+  fill('black');
+  Text("game over",0,0); // wtf waarom geen text
+  noLoop();
+}
 
-function createCheckers(spelVlakBreedte, vakZijde) {    //Senne plz doe deze ik snap er niks van
-  for (var rij = 0; rij < spelVlakBreedte; rij += vakZijde) {
-    for (var kolom = 0; kolom < spelVlakBreedte; kolom += vakZijde) {
+//maakt de achtergrond
+function createCheckers(spelVlakBreedte, vakZijde) {    
+  for (var rij = 0; rij < spelVlakBreedte; rij += vakZijde) { //gaat alle rijen langs, wordt vergroot met de groote van de zijdes
+    for (var kolom = 0; kolom < spelVlakBreedte; kolom += vakZijde) { //hetzelfde als boven, een for loop in een for loop zorgt dat hij alle vakjes gebruikt
       if ((rij % (vakZijde * 2) == 0 && kolom % (vakZijde * 2) != 0) || (kolom % (vakZijde * 2) == 0 && rij % (vakZijde * 2) != 0)) {
         fill('black');
         rect(positieCorrectie + kolom, positieCorrectie + rij,vakZijde,vakZijde);

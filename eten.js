@@ -17,13 +17,11 @@ class Eten {
 
     teken() {
       push();
-
-      // tekent de appel
       fill('red');
       noStroke();
       lights(); //geeft een lichte schaduw op de appel, waardoor er diepte merkbaar is
       translate(positieCorrectie + 0.5*vakZijde + this.x * vakZijde, positieCorrectie + 0.5*vakZijde + this.y * vakZijde, 0);
-      rotateZ(frameCount * 0.5); // draait hem op de z-as  
+      rotateZ(frameCount * 0.05); // draait hem op de z-as  
       sphere(0.35*vakZijde);
       
       // tekent het steeltje van de appel
