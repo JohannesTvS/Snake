@@ -2,11 +2,13 @@
 Wat moet er nog gebeuren:
     draw pas starten als een knop is ingedrukt
     geluid?
-    beter scherm als je dood bent. Mss iets van een opnieuw knop
-    snelheid van de slang niet vast maken aan de fps, voor smoothere animaties
-    text werkt niet bij eindscherm
+    opnieuwknop moet nog onder de game over staan, misschien knop in javascript ipv html
 */
 
+var roboto;
+function preload() { // zorgt ervoor dat het ingeladen woord voor de draw
+    roboto = loadFont('fonts/Roboto-Regular.ttf'); // laad het lettertype in
+}
 
 var vakZijde = 40;  //lengte van 1 vakje
 var aantalHokjes = 13;  //aantal hokjes in de lengte en breedte
@@ -27,15 +29,15 @@ function setup() {
   createCheckers(spelVlakBreedte, vakZijde);    //tekent de achtergrond met schaakpatroon
   slang.teken();
   eten.teken();
-  textFont("Verdana");
-  textSize(width / 3);
-  textAlign(CENTER, CENTER);
+  textFont(roboto); //standaardlettertype
+  textSize(width / 20); //standaardgrootte van de tekst is de breedte van de canvas gedeeld door 20
+  textAlign(CENTER, CENTER); //zorgt ervoor dat de text in het textvak standaard gecentreerd is
 }
 
 function draw() {
 
   //if ()
-    createCheckers(spelVlakBreedte, vakZijde);
+  createCheckers(spelVlakBreedte, vakZijde);
   if (frameCount % (fps / spelSnelheid) == 0) {
   slang.beweeg(richting);
   laatsteRichting = richting;
@@ -47,16 +49,26 @@ function draw() {
   eten.teken();
   slang.teken();
   if (slang.dood()) {
-   eindScherm();   //stopt alle p5 elementen
+   eindScherm();
  }
 
 }
 
 function eindScherm() {
-  background('white');
+  fill('rgba(255,255,255,0.75)'); //witte kleur met doorzichtigheid zodat je het spelvlak nog een beetje kan zien
+  translate(0,0,50); // voorhoogt de positie in de hoogte, zodat ook de slang en appel onder het blok staan
+  rect(positieCorrectie,positieCorrectie,spelVlakBreedte,spelVlakBreedte); //blok over het hele speelvlak heen
   fill('black');
-  Text("game over",0,0); // wtf waarom geen text
-  noLoop();
+  text("game over",0,0);
+
+  //maakt een html knop waarmee je de pagina kan herladen om opnieuw te spelen
+  var opnieuwKnop = document.createElement("BUTTON"); //maakt de knop element
+  opnieuwKnop.innerHTML = "speel nog een keer"; //de tekst die op de knop komt te staan
+  document.body.appendChild(opnieuwKnop); //voegt de knop toe aan de body van het html document waar dit bestand in zit
+  var opnieuwAtt = document.createAttribute("onclick"); //maakt de attribute onclick
+  opnieuwAtt.value = "location.href = 'index.html';"; //de waarde die bij onclick komt te staan
+  opnieuwKnop.attributes.setNamedItem(opnieuwAtt); //attribuut word toegevoegt
+  noLoop(); //stopt de draw
 }
 
 //maakt de achtergrond
