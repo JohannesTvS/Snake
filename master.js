@@ -3,6 +3,9 @@ Wat moet er nog gebeuren:
     draw pas starten als een knop is ingedrukt
     geluid?
     opnieuwknop moet nog onder de game over staan, misschien knop in javascript ipv html
+    startscherm moet nog gemaakt worden
+    knop werkt niet, zie functie
+    als je naar het spel wil, zet spelPause op false
 */
 
 var roboto;
@@ -10,13 +13,17 @@ function preload() { // zorgt ervoor dat het ingeladen woord voor de draw
     roboto = loadFont('fonts/Roboto-Regular.ttf'); // laad het lettertype in
 }
 
+var spelPause = true; //bepaald of het spel gepauseerd meot worden;
+
 var vakZijde = 40;  //lengte van 1 vakje
 var aantalHokjes = 13;  //aantal hokjes in de lengte en breedte
 var spelVlakBreedte = aantalHokjes * vakZijde;
 var positieCorrectie = -(0.5*(spelVlakBreedte + 1)); // omdat we WEBGl gebruiken om de 3d kubussen te tekenen is het vlak anders ingesteld, waarbij 0,0 het midden van de canvas is, deze regel corrigeert dat.
+
 var beginLengte = 3;    //begin lengte van de slang
 var richting = "links"; //begin richting
 var laatsteRichting = richting; //richting die de slang de laatste keer is opgegaan
+
 var fps = 60; //ware frames per seconde
 var spelSnelheid = 4; // fps voor de bewegingen
 
@@ -26,33 +33,45 @@ function setup() {
   background('black');
   slang = new Snake();
   eten = new Eten(slang);
-  createCheckers(spelVlakBreedte, vakZijde);    //tekent de achtergrond met schaakpatroon
-  slang.teken();
-  eten.teken();
+  //createCheckers(spelVlakBreedte, vakZijde);    //tekent de achtergrond met schaakpatroon
+  //slang.teken();
+  //eten.teken();
   textFont(roboto); //standaardlettertype
   textSize(width / 20); //standaardgrootte van de tekst is de breedte van de canvas gedeeld door 20
   textAlign(CENTER, CENTER); //zorgt ervoor dat de text in het textvak standaard gecentreerd is
 }
 
 function draw() {
+    if(spelPause == true) {
+        fill('white');
+        rect(positieCorrectie,positieCorrectie,width,height);
+        rectKnop(width*0.5, height*0.5, 100, 50, 'white', 'red', spelPause);
+    }
+  
+   if (spelPause == false) {
+    createCheckers(spelVlakBreedte, vakZijde);
+    if (frameCount % (fps / spelSnelheid) == 0) {
+        slang.beweeg(richting);
+        laatsteRichting = richting;
+        if (eten.isGegeten(slang)) {
+            slang.groei(richting);
+            eten = new Eten(slang);
+        }
+        }
+    eten.teken();
+    slang.teken();
+    if (slang.dood()) {
+        eindScherm();
+        }
+   }
 
-  //if ()
-  createCheckers(spelVlakBreedte, vakZijde);
-  if (frameCount % (fps / spelSnelheid) == 0) {
-  slang.beweeg(richting);
-  laatsteRichting = richting;
-  if (eten.isGegeten(slang)) {
-    slang.groei(richting);
-    eten = new Eten(slang);
-  }
-}
-  eten.teken();
-  slang.teken();
-  if (slang.dood()) {
-   eindScherm();
+    // fill('black')
+    // rect(positieCorrectie, positieCorrectie, 100, 100);
+    // fill('white');
+    // text(mouseX, positieCorrectie + 20, positieCorrectie + 20);
+    // text(mouseY, positieCorrectie + 20 *2, positieCorrectie + 20 *2);
+    // text(mouseIsPressed, positieCorrectie + 20*2, positieCorrectie + 20 *4);
  }
-
-}
 
 function eindScherm() {
   fill('rgba(255,255,255,0.75)'); //witte kleur met doorzichtigheid zodat je het spelvlak nog een beetje kan zien
@@ -70,6 +89,39 @@ function eindScherm() {
   opnieuwKnop.attributes.setNamedItem(opnieuwAtt); //attribuut word toegevoegt
   noLoop(); //stopt de draw
 }
+
+function rectKnop(xPositie, yPositie, breedte, hoogte, kleur, kleurHover, trueFalseStatement) {
+    if((mouseX >= xPositie - (breedte*0.5)  || mouseX <= xPositie + (breedte*0.5)) && (mouseY >= yPositie - (hoogte*0.5)  || mouseY <= yPositie + (hoogte*0.5))) {
+        fill(kleurHover);
+        console.log("muis erover");
+        if (mouseIsPressed) {
+            trueFalseStatement = -trueFalseStatement;
+            console.log("muis erover en geklikt");
+            console.log(typeof trueFalseStatement);
+        }
+    }
+    else {
+        fill(kleur);
+        
+    }
+    rect(positieCorrectie + xPositie, positieCorrectie + yPositie, breedte,hoogte);
+}
+// function startKnop() {
+//     var knopHoogte = 50;
+//     var knopBreedte = 100;
+    
+//     if((mouseX == positieCorrectie + knopBreedte && mouseY == positieCorrectie + width*0.5 - knopHoogte)) {
+//        fill('red');
+//     }
+//     rect(-0.5*knopBreedte, knopHoogte, knopBreedte, knopHoogte); 
+//     fill('black');
+//     textAlign(CENTER, CENTER);
+//     text("START", -0.5*knopBreedte, knopHoogte, knopBreedte, knopHoogte);
+    
+//     if((mouseX == positieCorrectie + knopBreedte && mouseY == knopHoogte) && mouseIsPressed == true) {
+//        spelPause == false;
+//     }
+// }
 
 //maakt de achtergrond
 function createCheckers(spelVlakBreedte, vakZijde) {    
