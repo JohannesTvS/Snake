@@ -4,7 +4,7 @@ Wat moet er nog gebeuren:
     geluid?
     opnieuwknop moet nog onder de game over staan, misschien knop in javascript ipv html
     startscherm moet nog gemaakt worden
-    knop werkt niet, zie functie
+    knop wil niet de bollean omzetten
     als je naar het spel wil, zet spelPause op false
 */
 
@@ -13,7 +13,7 @@ function preload() { // zorgt ervoor dat het ingeladen woord voor de draw
     roboto = loadFont('fonts/Roboto-Regular.ttf'); // laad het lettertype in
 }
 
-var spelPause = true; //bepaald of het spel gepauseerd meot worden;
+var spelPause = false; //bepaald of het spel gepauseerd meot worden;
 
 var vakZijde = 40;  //lengte van 1 vakje
 var aantalHokjes = 13;  //aantal hokjes in de lengte en breedte
@@ -42,13 +42,14 @@ function setup() {
 }
 
 function draw() {
-    if(spelPause == true) {
+    if(spelPause) {
         fill('white');
         rect(positieCorrectie,positieCorrectie,width,height);
         rectKnop(width*0.5, height*0.5, 100, 50, 'white', 'red', spelPause);
+        fill('black');
+        text(mouseX + " " +mouseIsPressed + " " + spelPause, 0,0);
     }
-  
-   if (spelPause == false) {
+    else {
     createCheckers(spelVlakBreedte, vakZijde);
     if (frameCount % (fps / spelSnelheid) == 0) {
         slang.beweeg(richting);
@@ -64,13 +65,6 @@ function draw() {
         eindScherm();
         }
    }
-
-    // fill('black')
-    // rect(positieCorrectie, positieCorrectie, 100, 100);
-    // fill('white');
-    // text(mouseX, positieCorrectie + 20, positieCorrectie + 20);
-    // text(mouseY, positieCorrectie + 20 *2, positieCorrectie + 20 *2);
-    // text(mouseIsPressed, positieCorrectie + 20*2, positieCorrectie + 20 *4);
  }
 
 function eindScherm() {
@@ -91,37 +85,22 @@ function eindScherm() {
 }
 
 function rectKnop(xPositie, yPositie, breedte, hoogte, kleur, kleurHover, trueFalseStatement) {
-    if((mouseX >= xPositie - (breedte*0.5)  || mouseX <= xPositie + (breedte*0.5)) && (mouseY >= yPositie - (hoogte*0.5)  || mouseY <= yPositie + (hoogte*0.5))) {
+    if((mouseX >= xPositie  && mouseX <= xPositie + breedte) && (mouseY >= yPositie  && mouseY <= yPositie + hoogte)) {
         fill(kleurHover);
-        console.log("muis erover");
         if (mouseIsPressed) {
-            trueFalseStatement = -trueFalseStatement;
-            console.log("muis erover en geklikt");
-            console.log(typeof trueFalseStatement);
+            if (trueFalseStatement) {
+                return trueFalseStatement = false;
+            }
+            else {
+                return trueFalseStatement = true;
+            }
         }
     }
     else {
-        fill(kleur);
-        
+        fill(kleur);   
     }
     rect(positieCorrectie + xPositie, positieCorrectie + yPositie, breedte,hoogte);
 }
-// function startKnop() {
-//     var knopHoogte = 50;
-//     var knopBreedte = 100;
-    
-//     if((mouseX == positieCorrectie + knopBreedte && mouseY == positieCorrectie + width*0.5 - knopHoogte)) {
-//        fill('red');
-//     }
-//     rect(-0.5*knopBreedte, knopHoogte, knopBreedte, knopHoogte); 
-//     fill('black');
-//     textAlign(CENTER, CENTER);
-//     text("START", -0.5*knopBreedte, knopHoogte, knopBreedte, knopHoogte);
-    
-//     if((mouseX == positieCorrectie + knopBreedte && mouseY == knopHoogte) && mouseIsPressed == true) {
-//        spelPause == false;
-//     }
-// }
 
 //maakt de achtergrond
 function createCheckers(spelVlakBreedte, vakZijde) {    
