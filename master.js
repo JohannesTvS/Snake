@@ -4,8 +4,7 @@ Wat moet er nog gebeuren:
     geluid?
     opnieuwknop moet nog onder de game over staan, misschien knop in javascript ipv html
     startscherm moet nog gemaakt worden
-    knop wil niet de bollean omzetten
-    als je naar het spel wil, zet spelPause op false
+    ik vermoed dat het spel sloom voelt omdat het de 60 fps niet kan aantikken
 */
 
 var roboto;
@@ -13,7 +12,7 @@ function preload() { // zorgt ervoor dat het ingeladen woord voor de draw
     roboto = loadFont('fonts/Roboto-Regular.ttf'); // laad het lettertype in
 }
 
-var spelPause = false; //bepaald of het spel gepauseerd meot worden;
+var beginScherm = true;
 
 var vakZijde = 40;  //lengte van 1 vakje
 var aantalHokjes = 13;  //aantal hokjes in de lengte en breedte
@@ -33,21 +32,21 @@ function setup() {
   background('black');
   slang = new Snake();
   eten = new Eten(slang);
-  //createCheckers(spelVlakBreedte, vakZijde);    //tekent de achtergrond met schaakpatroon
-  //slang.teken();
-  //eten.teken();
+//   createCheckers(spelVlakBreedte, vakZijde);    //tekent de achtergrond met schaakpatroon
+//   slang.teken();
+//   eten.teken();
   textFont(roboto); //standaardlettertype
   textSize(width / 20); //standaardgrootte van de tekst is de breedte van de canvas gedeeld door 20
   textAlign(CENTER, CENTER); //zorgt ervoor dat de text in het textvak standaard gecentreerd is
 }
 
 function draw() {
-    if(spelPause) {
+    if(beginScherm) {
         fill('white');
         rect(positieCorrectie,positieCorrectie,width,height);
-        rectKnop(width*0.5, height*0.5, 100, 50, 'white', 'red', spelPause);
+        beginScherm = rectKnop(width*0.5 - 50, height*0.5 - 25, 100, 50, 'white', 'red' , beginScherm);
         fill('black');
-        text(mouseX + " " +mouseIsPressed + " " + spelPause, 0,0);
+        text("snake", 0, -50);
     }
     else {
     createCheckers(spelVlakBreedte, vakZijde);
@@ -100,6 +99,7 @@ function rectKnop(xPositie, yPositie, breedte, hoogte, kleur, kleurHover, trueFa
         fill(kleur);   
     }
     rect(positieCorrectie + xPositie, positieCorrectie + yPositie, breedte,hoogte);
+    return trueFalseStatement;
 }
 
 //maakt de achtergrond
