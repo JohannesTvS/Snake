@@ -1,10 +1,8 @@
 /*
 Wat moet er nog gebeuren:
-    draw pas starten als een knop is ingedrukt
     geluid?
-    opnieuwknop moet nog onder de game over staan, misschien knop in javascript ipv html
-    startscherm moet nog gemaakt worden
     ik vermoed dat het spel sloom voelt omdat het de 60 fps niet kan aantikken
+    kan, ik merk er niet veel van, maar als het zo is komt dat omdat createcheckers lang duurt
 */
 
 var roboto;
@@ -23,12 +21,12 @@ var beginLengte = 3;    //begin lengte van de slang
 var richting = "links"; //begin richting
 var laatsteRichting = richting; //richting die de slang de laatste keer is opgegaan
 
-var fps = 60; //ware frames per seconde
+var fpBeweging3d = 15; //ware frames per beweging van de slang voor de 3d objecten
 var spelSnelheid = 4; // fps voor de bewegingen
 
 function setup() {
   createCanvas(spelVlakBreedte + 1, spelVlakBreedte + 1, WEBGL); // met WEBGL kan je 3D-objecten renderen
-  frameRate(fps);
+  frameRate(fpBeweging3d * spelSnelheid);
   background('black');
   slang = new Snake();
   eten = new Eten(slang);
@@ -50,7 +48,7 @@ function draw() {
     }
     else {
     createCheckers(spelVlakBreedte, vakZijde);
-    if (frameCount % (fps / spelSnelheid) == 0) {
+    if (frameCount % fpBeweging3d == 0) {
         slang.beweeg(richting);
         laatsteRichting = richting;
         if (eten.isGegeten(slang)) {
