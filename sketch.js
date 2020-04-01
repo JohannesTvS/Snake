@@ -21,7 +21,7 @@ var beginLengte = 3;    //begin lengte van de slang
 var richting = "links"; //begin richting
 var laatsteRichting = richting; //richting die de slang de laatste keer is opgegaan
 
-var fpBeweging3d = 15; //ware frames per beweging van de slang voor de 3d objecten
+var fpBeweging3d = 6; //ware frames per beweging van de slang voor de 3d objecten
 var spelSnelheid = 10; // fps voor de bewegingen
 
 function setup() {
