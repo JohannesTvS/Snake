@@ -22,7 +22,7 @@ var richting = "links"; //begin richting
 var laatsteRichting = richting; //richting die de slang de laatste keer is opgegaan
 
 var fpBeweging3d = 15; //ware frames per beweging van de slang voor de 3d objecten
-var spelSnelheid = 4; // fps voor de bewegingen
+var spelSnelheid = 10; // fps voor de bewegingen
 
 function setup() {
   createCanvas(spelVlakBreedte + 1, spelVlakBreedte + 1, WEBGL); // met WEBGL kan je 3D-objecten renderen
