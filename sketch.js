@@ -1,5 +1,6 @@
 /*
 Wat moet er nog gebeuren:
+    pauzeknop naast esc. Zou mooi zijn als het dezelfde knop is als de opnieuw knop, maar met andere tekst en functie
     geluid?
     ik vermoed dat het spel sloom voelt omdat het de 60 fps niet kan aantikken
     kan, ik merk er niet veel van, maar als het zo is komt dat omdat createcheckers lang duurt
@@ -11,6 +12,7 @@ function preload() { // zorgt ervoor dat het ingeladen woord voor de draw
 }
 
 var beginScherm = true;
+var pauzeScherm = false;
 
 var vakZijde = 40;  //lengte van 1 vakje
 var aantalHokjes = 13;  //aantal hokjes in de lengte en breedte
@@ -46,6 +48,14 @@ function draw() {
         fill('black');
         text("snake", 0, -50);
     }
+    else if (pauzeScherm){
+        fill(255);
+        translate(0,0,50); // voorhoogt de positie in de hoogte, zodat ook de slang en appel onder het blok staan
+        rect(positieCorrectie,positieCorrectie, spelVlakBreedte); //blok over het hele speelvlak heen
+        fill(0);
+        text("pauze",0,0);
+        
+    } 
     else {
     createCheckers(spelVlakBreedte, vakZijde);
     if (frameCount % fpBeweging3d == 0) {
@@ -55,14 +65,14 @@ function draw() {
             slang.groei(richting);
             eten = new Eten(slang);
         }
-        }
+     }
     eten.teken();
     slang.teken();
     if (slang.dood()) {
         eindScherm();
         }
    }
- }
+}
 
 function eindScherm() {
   fill('rgba(255,255,255,0.75)'); //witte kleur met doorzichtigheid zodat je het spelvlak nog een beetje kan zien
@@ -72,12 +82,12 @@ function eindScherm() {
   text("game over",0,0);
 
   //maakt een html knop waarmee je de pagina kan herladen om opnieuw te spelen
-  var opnieuwKnop = document.createElement("BUTTON"); //maakt de knop element
-  opnieuwKnop.innerHTML = "speel nog een keer"; //de tekst die op de knop komt te staan
-  document.body.appendChild(opnieuwKnop); //voegt de knop toe aan de body van het html document waar dit bestand in zit
+  var knop = document.createElement("BUTTON"); //maakt de knop element
+  knop.innerHTML = "speel nog een keer"; //de tekst die op de knop komt te staan
+  document.body.appendChild(knop); //voegt de knop toe aan de body van het html document waar dit bestand in zit
   var opnieuwAtt = document.createAttribute("onclick"); //maakt de attribute onclick
   opnieuwAtt.value = "location.href = 'index.html';"; //de waarde die bij onclick komt te staan
-  opnieuwKnop.attributes.setNamedItem(opnieuwAtt); //attribuut word toegevoegt
+  knop.attributes.setNamedItem(opnieuwAtt); //attribuut word toegevoegt
   noLoop(); //stopt de draw
 }
 
@@ -85,12 +95,8 @@ function rectKnop(xPositie, yPositie, breedte, hoogte, kleur, kleurHover, trueFa
     if((mouseX >= xPositie  && mouseX <= xPositie + breedte) && (mouseY >= yPositie  && mouseY <= yPositie + hoogte)) {
         fill(kleurHover);
         if (mouseIsPressed) {
-            if (trueFalseStatement) {
-                return trueFalseStatement = false;
-            }
-            else {
-                return trueFalseStatement = true;
-            }
+            trueFalseStatement = !trueFalseStatement;
+            return trueFalseStatement;
         }
     }
     else {
@@ -167,6 +173,9 @@ function keyPressed() {
         richting = "omlaag";
       }
       break;
+    case 27:    //esc
+      //maakt pauzeScherm true als die false is en omgekeerd
+      pauzeScherm = !pauzeScherm
     default:
       break;
   }
