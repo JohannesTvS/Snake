@@ -23,18 +23,16 @@ var beginLengte = 3;    //begin lengte van de slang
 var richting = "links"; //begin richting
 var laatsteRichting = richting; //richting die de slang de laatste keer is opgegaan
 
-var fpBeweging3d = 6; //ware frames per beweging van de slang voor de 3d objecten
-var spelSnelheid = 10; // fps voor de bewegingen
+var fpsAnimatie = 60; //ware frames voor animatie van bijvoorbeeld de appel
+var spelSnelheid = 5; // fps voor de bewegingen
 
 function setup() {
   createCanvas(spelVlakBreedte + 1, spelVlakBreedte + 1, WEBGL); // met WEBGL kan je 3D-objecten renderen
-  frameRate(fpBeweging3d * spelSnelheid);
+  frameRate(fpsAnimatie);
   background('black');
   slang = new Snake();
   eten = new Eten(slang);
-//   createCheckers(spelVlakBreedte, vakZijde);    //tekent de achtergrond met schaakpatroon
-//   slang.teken();
-//   eten.teken();
+  createCheckers(spelVlakBreedte, vakZijde);    //tekent de achtergrond met schaakpatroon
   textFont(roboto); //standaardlettertype
   textSize(width / 20); //standaardgrootte van de tekst is de breedte van de canvas gedeeld door 20
   textAlign(CENTER, CENTER); //zorgt ervoor dat de text in het textvak standaard gecentreerd is
@@ -42,11 +40,16 @@ function setup() {
 
 function draw() {
     if(beginScherm) {
-        fill('white');
-        rect(positieCorrectie,positieCorrectie,width,height);
-        beginScherm = rectKnop(width*0.5 - 50, height*0.5 - 25, 100, 50, 'white', 'red' , beginScherm);
+        createCheckers(spelVlakBreedte, vakZijde);
+        beginScherm = rectKnop(width*0.5 - 50, height*0.5 - 25, 100, 50, 'white', 'red' , beginScherm, 'start');
+        push();
         fill('black');
-        text("snake", 0, -50);
+        textSize(100);
+        text("snake", 0, -150);
+        textSize(20);
+        text("press W A S D or arrow keys to move", 0, 40);
+        text("press esc to pause the game", 0, 60);
+        pop();
     }
     else if (pauzeScherm){
         fill(255);
@@ -54,11 +57,10 @@ function draw() {
         rect(positieCorrectie,positieCorrectie, spelVlakBreedte); //blok over het hele speelvlak heen
         fill(0);
         text("pauze",0,0);
-        
     } 
     else {
     createCheckers(spelVlakBreedte, vakZijde);
-    if (frameCount % fpBeweging3d == 0) {
+    if (frameCount % Math.floor(fpsAnimatie / spelSnelheid) == 0) {
         slang.beweeg(richting);
         laatsteRichting = richting;
         if (eten.isGegeten(slang)) {
@@ -75,7 +77,7 @@ function draw() {
 }
 
 function eindScherm() {
-  fill('rgba(255,255,255,0.75)'); //witte kleur met doorzichtigheid zodat je het spelvlak nog een beetje kan zien
+  fill('rgba(255,255,255,0.6)'); //witte kleur met doorzichtigheid zodat je het spelvlak nog een beetje kan zien
   translate(0,0,50); // voorhoogt de positie in de hoogte, zodat ook de slang en appel onder het blok staan
   rect(positieCorrectie,positieCorrectie,spelVlakBreedte,spelVlakBreedte); //blok over het hele speelvlak heen
   fill('black');
@@ -91,7 +93,7 @@ function eindScherm() {
   noLoop(); //stopt de draw
 }
 
-function rectKnop(xPositie, yPositie, breedte, hoogte, kleur, kleurHover, trueFalseStatement) {
+function rectKnop(xPositie, yPositie, breedte, hoogte, kleur, kleurHover, trueFalseStatement, buttonText) {
     if((mouseX >= xPositie  && mouseX <= xPositie + breedte) && (mouseY >= yPositie  && mouseY <= yPositie + hoogte)) {
         fill(kleurHover);
         if (mouseIsPressed) {
@@ -103,6 +105,8 @@ function rectKnop(xPositie, yPositie, breedte, hoogte, kleur, kleurHover, trueFa
         fill(kleur);   
     }
     rect(positieCorrectie + xPositie, positieCorrectie + yPositie, breedte,hoogte);
+    fill('black');
+    text(buttonText, positieCorrectie + xPositie, positieCorrectie + yPositie, breedte,hoogte);
     return trueFalseStatement;
 }
 
@@ -110,13 +114,16 @@ function rectKnop(xPositie, yPositie, breedte, hoogte, kleur, kleurHover, trueFa
 function createCheckers(spelVlakBreedte, vakZijde) {    
   for (var rij = 0; rij < spelVlakBreedte; rij += vakZijde) { //gaat alle rijen langs, wordt vergroot met de groote van de zijdes
     for (var kolom = 0; kolom < spelVlakBreedte; kolom += vakZijde) { //hetzelfde als boven, een for loop in een for loop zorgt dat hij alle vakjes gebruikt
+        push();
+        noStroke();
       if ((rij % (vakZijde * 2) == 0 && kolom % (vakZijde * 2) != 0) || (kolom % (vakZijde * 2) == 0 && rij % (vakZijde * 2) != 0)) {
-        fill('black');
+        fill('rgb(40,110,40)');
         rect(positieCorrectie + kolom, positieCorrectie + rij,vakZijde,vakZijde);
       } else {
-        fill('white');
+        fill('rgb(40,150,40)');
         rect(positieCorrectie + kolom, positieCorrectie +  rij, vakZijde, vakZijde);
       }
+      pop();
     }
   }
 }
