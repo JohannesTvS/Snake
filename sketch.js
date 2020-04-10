@@ -1,14 +1,20 @@
-/*
-Wat moet er nog gebeuren:
-    pauzeknop naast esc. Zou mooi zijn als het dezelfde knop is als de opnieuw knop, maar met andere tekst en functie
-    geluid?
-    ik vermoed dat het spel sloom voelt omdat het de 60 fps niet kan aantikken
-    kan, ik merk er niet veel van, maar als het zo is komt dat omdat createcheckers lang duurt
-*/
+//variabelen voor het lettertype en het geluid
+var roboto; 
+var gameOverGeluid;
+var eetGeluid;
 
-var roboto;
-function preload() { // zorgt ervoor dat het ingeladen woord voor de draw
-    roboto = loadFont('fonts/Roboto-Regular.ttf'); // laad het lettertype in
+// zorgt ervoor dat het ingeladen woord voor de draw
+function preload() { 
+
+    // laad het lettertype in
+    roboto = loadFont('fonts/Roboto-Regular.ttf'); 
+
+    //geeft het geluidstype aan
+    soundFormats('wav');
+
+    //laat de geluiden in
+    gameOverGeluid = loadSound('geluid/gameOver.wav');
+    eetGeluid = loadSound('geluid/eetGeluid.wav');
 }
 
 var beginScherm = true;
@@ -26,21 +32,23 @@ var laatsteRichting = richting; //richting die de slang de laatste keer is opgeg
 var fpsAnimatie = 60; //ware frames voor animatie van bijvoorbeeld de appel
 var spelSnelheid = 5; // fps voor de bewegingen
 
+
 function setup() {
   createCanvas(spelVlakBreedte + 1, spelVlakBreedte + 1, WEBGL); // met WEBGL kan je 3D-objecten renderen
   frameRate(fpsAnimatie);
-  background('black');
-  slang = new Snake();
-  eten = new Eten(slang);
-  createCheckers(spelVlakBreedte, vakZijde);    //tekent de achtergrond met schaakpatroon
   textFont(roboto); //standaardlettertype
   textSize(width / 20); //standaardgrootte van de tekst is de breedte van de canvas gedeeld door 20
   textAlign(CENTER, CENTER); //zorgt ervoor dat de text in het textvak standaard gecentreerd is
+
+  slang = new Snake();  //maakt een instance van het object Snake
+  eten = new Eten(slang);   //maakt een nieuwe appel en krijgt de gegevens van slang mee
 }
 
+
+//alles in deze loop wordt fps keer per seconde herhaald
 function draw() {
-    if(beginScherm) {
-        createCheckers(spelVlakBreedte, vakZijde);
+    if(beginScherm) {   //als we in het beginscherm zitten wordt dit uitgevoerd
+        maakSchaakPatroon(spelVlakBreedte, vakZijde);   //tekent de achtergrond met schaakpatroon
         beginScherm = rectKnop(width*0.5 - 50, height*0.5 - 25, 100, 50, 'white', 'red' , beginScherm, 'start');
         push();
         fill('black');
@@ -52,25 +60,25 @@ function draw() {
         pop();
     }
     else if (pauzeScherm){
-        fill(255);
-        translate(0,0,50); // voorhoogt de positie in de hoogte, zodat ook de slang en appel onder het blok staan
-        rect(positieCorrectie,positieCorrectie, spelVlakBreedte); //blok over het hele speelvlak heen
         fill(0);
         text("pauze",0,0);
     } 
     else {
-    createCheckers(spelVlakBreedte, vakZijde);
+    maakSchaakPatroon(spelVlakBreedte, vakZijde);
+    //als de slang 6 keer per seconde beweegt bij 60 fps, moet de slang bewegen bij elke framecount waar framecount % 10 == 0
     if (frameCount % Math.floor(fpsAnimatie / spelSnelheid) == 0) {
         slang.beweeg(richting);
         laatsteRichting = richting;
         if (eten.isGegeten(slang)) {
             slang.groei(richting);
             eten = new Eten(slang);
+            eetGeluid.play();
         }
      }
     eten.teken();
     slang.teken();
     if (slang.dood()) {
+        gameOverGeluid.play();
         eindScherm();
         }
    }
@@ -110,8 +118,9 @@ function rectKnop(xPositie, yPositie, breedte, hoogte, kleur, kleurHover, trueFa
     return trueFalseStatement;
 }
 
+
 //maakt de achtergrond
-function createCheckers(spelVlakBreedte, vakZijde) {    
+function maakSchaakPatroon(spelVlakBreedte, vakZijde) {    
   for (var rij = 0; rij < spelVlakBreedte; rij += vakZijde) { //gaat alle rijen langs, wordt vergroot met de groote van de zijdes
     for (var kolom = 0; kolom < spelVlakBreedte; kolom += vakZijde) { //hetzelfde als boven, een for loop in een for loop zorgt dat hij alle vakjes gebruikt
         push();

@@ -3,14 +3,15 @@ class Snake {
     this.x = round(aantalHokjes / 2);   //start het hoofd van de slang in het midden, midden + 0,5 bij een oneven aantal hokjes
     this.y = round(aantalHokjes / 2);
     this.lichaam = [];
+
     for (let i = 0; i < beginLengte; i++) { //plaatst de rest van de slang rechts achter het hoofd
       this.lichaam.push(this.x + i, this.y);
     }
     this.lengte = this.lichaam.length;
   }
 
-  teken() {
 
+  teken() {
     fill("blue");
     for (let i = 0; i < this.lengte; i += 2) {
       push();
@@ -20,7 +21,8 @@ class Snake {
     }
   }
 
-  plekVrij(etenx, eteny) {  //controleert of het eten niet op een plek komt waar de slang al is
+    //controleert of het eten niet op een plek komt waar de slang al is
+  plekVrij(etenx, eteny) {
     //maakt een array met alle waarden met een even index, dit zijn de x-coordinaten
     let lichaamX = this.lichaam.filter(function(element, index) { 
       return (index % 2 == 0);
@@ -41,14 +43,15 @@ class Snake {
     return true;
   }
 
+    //voegt een nieuw blokje toe met dezelfde coordinaten als het achterste punt
   groei() {
-      //voegt een nieuw blokje toe met dezelfde coordinaten als het achterste punt
     this.lichaam.push(this.lichaam[this.lengte - 2], this.lichaam[this.lengte - 1]);
   }
 
-  dood() {
+
  //controleer of het hooofd de staart raakt
-    //doet excact hetzelfde als plekVrij, alleen zijn etenX-Y vervangen door het hoofd en wordt dit keer niet ook in het hoofd doorzocht
+//doet excact hetzelfde als plekVrij, alleen zijn etenX-Y vervangen door het hoofd en wordt dit keer niet ook in het hoofd doorzocht
+  dood() {
     let lichaamX = this.lichaam.filter(function(element, index) {
       return (index % 2 == 0);
     });
@@ -71,7 +74,7 @@ class Snake {
 
   }
 
-
+//beweegt de slang in de aangegeven richting
   beweeg(richting) {
 
     this.beweegStaart = function() {    //schuift elk blokje van de slang naar het blokje voor zich

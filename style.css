@@ -8,6 +8,6 @@ canvas {
 }
 
 button {
-    position: absolute; # bedoeling is dat de knop onder de game over moet staan, misschien is het handiger om een knop in javascript te maken
+    position: absolute;
 }
 
